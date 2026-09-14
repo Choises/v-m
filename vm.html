@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🇬🇷Panagiotis🇬🇷</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Kanit', sans-serif;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: transparent !important;
+    }
+
+    body {
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 6px;
+      position: relative;
+    }
+
+    /* 📱  */
+    .player-card {
+      position: relative;
+      z-index: 3;
+      width: 100%;
+      max-width: 380px;
+      height: 100%;
+      background: linear-gradient(160deg, #0b132b 0%, #1c2541 100%); /* พื้นสีกรมท่าเข้ม */
+      border: 2px solid #00d2ff; /* */
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9),
+                  0 0 20px rgba(0, 210, 255, 0.6),
+                  inset 0 0 10px rgba(0, 210, 255, 0.3);
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      overflow: hidden;
+    }
+
+    /* */
+    .tiktok-badge {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      padding: 4px 10px;
+      background: rgba(0, 210, 255, 0.08);
+      border-radius: 12px;
+      border: 1px solid rgba(0, 210, 255, 0.25);
+    }
+
+    .tiktok-channel {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /*  */
+    .cyan-glow-text {
+      color: #ffffff;
+      text-shadow: 0 0 6px #00d2ff, 0 0 12px #00d2ff;
+    }
+
+    .tiktok-icon {
+      width: 22px;
+      height: 22px;
+      background: #000;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: -2px -2px 6px #00d2ff, 2px 2px 6px #3a86ff;
+      font-size: 11px;
+      color: #fff;
+    }
+
+    /*  */
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #00d2ff;
+    }
+
+    .live-tag {
+      background: linear-gradient(45deg, #00d2ff, #3a86ff);
+      color: #fff;
+      padding: 2px 6px;
+      border-radius: 8px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      box-shadow: 0 0 8px rgba(0, 210, 255, 0.8);
+    }
+
+    /*  */
+    .song-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      padding: 6px 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 12px;
+      border: 1px solid rgba(0, 210, 255, 0.2);
+    }
+
+    .song-info-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .custom-logo {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid #00d2ff;
+      box-shadow: 0 0 6px rgba(0, 210, 255, 0.6);
+    }
+
+    .song-info h2 {
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .song-info p {
+      font-size: 10px;
+      color: #8da9c4;
+      font-weight: 500;
+    }
+
+    /* 📊  */
+    .eq-container {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 16px;
+    }
+
+    .eq-bar {
+      width: 3px;
+      height: 100%;
+      background: linear-gradient(to top, #3a86ff, #00d2ff);
+      border-radius: 3px;
+      transform-origin: bottom;
+      transform: scaleY(0.2);
+      transition: transform 0.2s ease;
+    }
+
+    .eq-container.playing .eq-bar:nth-child(1) { animation: eqBounce 0.6s infinite alternate ease-in-out; }
+    .eq-container.playing .eq-bar:nth-child(2) { animation: eqBounce 0.4s infinite alternate ease-in-out 0.1s; }
+    .eq-container.playing .eq-bar:nth-child(3) { animation: eqBounce 0.7s infinite alternate ease-in-out 0.2s; }
+    .eq-container.playing .eq-bar:nth-child(4) { animation: eqBounce 0.5s infinite alternate ease-in-out 0.15s; }
+    .eq-container.playing .eq-bar:nth-child(5) { animation: eqBounce 0.8s infinite alternate ease-in-out 0.05s; }
+
+    @keyframes eqBounce {
+      0% { transform: scaleY(0.15); }
+      100% { transform: scaleY(1); }
+    }
+
+    /* 🕒 */
+    .datetime-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .time-display {
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffffff;
+      text-shadow: 0 0 6px #00d2ff;
+      font-family: monospace;
+    }
+
+    .date-display {
+      font-size: 9px;
+      color: #8da9c4;
+    }
+
+    /* 🎬  */
+    .video-display-area {
+      flex: 1;
+      position: relative;
+      width: 100%;
+      min-height: 0;
+      border-radius: 14px;
+      overflow: hidden;
+      margin: 4px 0 8px 0;
+      border: 1px solid rgba(0, 210, 255, 0.35);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8);
+      background: #050508;
+    }
+
+    .video-display-area video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Controls บาร์ควบคุมด้านล่าง */
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: rgba(11, 19, 43, 0.85);
+      padding: 8px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(0, 210, 255, 0.3);
+    }
+
+    .progress-bar-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      color: #8da9c4;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 5px;
+      accent-color: #00d2ff;
+      cursor: pointer;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 8px;
+    }
+
+    .btn-control {
+      background: none;
+      border: none;
+      color: #d1d5db;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-control:hover {
+      color: #00d2ff;
+      transform: scale(1.15);
+      text-shadow: 0 0 8px #00d2ff;
+    }
+
+    .btn-play {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(45deg, #00d2ff, #3a86ff);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 13px;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(0, 210, 255, 0.6);
+    }
+
+    .btn-play:hover {
+      transform: scale(1.08);
+      box-shadow: 0 4px 18px rgba(0, 210, 255, 0.9);
+    }
+#open-chat-btn { 
+    color: #00ffcc !important; 
+    text-shadow: 0 0 10px rgba(0, 255, 204, 0.8); 
+    transition: all 0.3s ease;
+}
+#open-chat-btn:hover { 
+    color: #ffffff !important;
+    text-shadow: 0 0 15px #00ffcc;
+    transform: scale(1.1); 
+}
+
+
+  </style>
+</head>
+<body>
+
+  <div class="player-card">
+    
+    <!--  -->
+    <div class="tiktok-badge">
+      <div class="tiktok-channel">
+        <div class="tiktok-icon"><i class="fa-brands fa-tiktok"></i></div>
+        <span class="cyan-glow-text">ᴾᵐPanagiotis🇬🇷</span>
+      </div>
+      <div class="status-icons">
+        <i class="fa-solid fa-signal"></i>
+        <i class="fa-solid fa-wifi"></i>
+        <i class="fa-solid fa-battery-full"></i>
+        <div class="live-tag">LIVE</div>
+      </div>
+    </div>
+
+    <!--  -->
+    <div class="song-header">
+      <div class="song-info-container">
+        <img src="https://xatimg.com/image/wN0GwHPQejWO.png" alt="Logo" class="custom-logo" id="song-logo">
+        <div class="song-info">
+          <h2 class="cyan-glow-text" id="song-title">ᴾᵐPanagiotis🇬🇷</h2>
+          <p id="artist-name">ᴾᴶLadч Punᵏᵐ</p>
+        </div>
+      </div>
+
+      <!--  -->
+      <div class="eq-container" id="eq-visualizer">
+        <div class="eq-bar"></div>
+        <div class="eq-bar"></div>
+        <div class="eq-bar"></div>
+        <div class="eq-bar"></div>
+        <div class="eq-bar"></div>
+      </div>
+
+      <!-- -->
+      <div class="datetime-container">
+        <div class="time-display" id="clock-time">00:00:00</div>
+        <div class="date-display" id="clock-date">00/00/0000</div>
+      </div>
+    </div>
+
+    <!-- 🎬  -->
+    <div class="video-display-area">
+      <video id="bg-video" autoplay loop muted playsinline>
+        <source src="https://choises.github.io/v_p_d/P-ARCHAIOLOGIST.mp4" type="video/mp4">
+       
+      </video>
+<!-- ΤΟ ΚΡΥΦΟ ΠΛΑΙΣΙΟ ΤΟΥ CHAT ΜΕ ΑΔΕΙΑ ΜΙΚΡΟΦΩΝΟΥ 🎙️ -->
+<iframe id="embedded-chat" src="https://choises.github.io/chati/chata" allow="microphone; microphone *"  style="display: none; width: 100%; height: 350px; border: none; border-radius: none; "></iframe>
+
+
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      
+<!-- ΝΕΑ ΜΠΑΡΑ ΕΝΤΑΣΗΣ ΗΧΟΥ 🔊 -->
+<div class="volume-container" style="display: flex; align-items: center; justify-content: center; gap: 10px; margin: 15px 0;">
+    <i class="fas fa-volume-down" style="color: #00ffcc; text-shadow: 0 0 5px rgba(0, 255, 204, 0.5);"></i>
+    <!-- value="0.5" σημαίνει έναρξη ακριβώς στο 50% -->
+    <input type="range" id="volume-bar" min="0" max="1" step="0.01" value="0.5" style="width: 100px; accent-color: #00ffcc; cursor: pointer;">
+    <i class="fas fa-volume-up" style="color: #00ffcc; text-shadow: 0 0 5px rgba(0, 255, 204, 0.5);"></i>
+</div>
+
+      <div class="buttons" style="position: relative; display: flex; justify-content: center; align-items: center; margin: -15px auto; width: 100%; min-height: 0px;">
+        <button class="btn-control" id="prev-track" title="Choices"><i class=""></i></button>
+        <center><button class="btn-control btn-play" id="play-btn"><i class="fa-solid fa-play" id="play-icon"></i></button></center>
+        <button class="btn-control" id="next-track" title="Choices"><i class=""></i></button>
+<button class="control-btn" id="open-chat-btn" onclick="toggleChatView()" title="Άνοιγμα Chat" style="background: none; border: none; cursor: pointer;"><i class="far fa-comment" style="font-size: 20px;"></i></button>
+
+      </div>
+    </div>
+
+  </div>
+
+  <audio id="audio-player"></audio>
+
+  <script>
+    const tracksData = [
+      {
+        title: "ᴾᵐPanagiotis🇬🇷",
+        artist: "Online Radio",
+        audioSrc: "https://stream.rcast.net/200586"
+      }
+    ];
+
+    let currentTrackIndex = 0;
+
+    const audio = document.getElementById('audio-player');
+    const playBtn = document.getElementById('play-btn');
+    const playIcon = document.getElementById('play-icon');
+    const progress = document.getElementById('progress');
+    const currentTimeEl = document.getElementById('current-time');
+    const durationEl = document.getElementById('duration');
+    const eqVisualizer = document.getElementById('eq-visualizer');
+
+    const songTitle = document.getElementById('song-title');
+    const artistName = document.getElementById('artist-name');
+
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      
+      const day = String(now.getDate()).padStart(2, '0');
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const year = now.getFullYear();
+
+      document.getElementById('clock-time').innerText = `${hours}:${minutes}:${seconds}`;
+      document.getElementById('clock-date').innerText = `${day}/${month}/${year}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    function loadTrack(index) {
+      currentTrackIndex = index;
+      const track = tracksData[currentTrackIndex];
+
+      songTitle.innerText = track.title;
+      artistName.innerText = track.artist;
+      audio.src = track.audioSrc;
+    }
+
+    audio.addEventListener('timeupdate', () => {
+      const currentTime = audio.currentTime;
+      if (audio.duration) {
+        progress.value = (currentTime / audio.duration) * 100 || 0;
+        durationEl.innerText = formatTime(audio.duration);
+      } else {
+        progress.value = 100;
+        durationEl.innerText = "LIVE";
+      }
+      currentTimeEl.innerText = formatTime(currentTime);
+    });
+
+    playBtn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+        playIcon.className = 'fa-solid fa-pause';
+        eqVisualizer.classList.add('playing');
+      } else {
+        audio.pause();
+        playIcon.className = 'fa-solid fa-play';
+        eqVisualizer.classList.remove('playing');
+      }
+    });
+
+    document.getElementById('next-track').addEventListener('click', () => {
+      currentTrackIndex = (currentTrackIndex + 1) % tracksData.length;
+      loadTrack(currentTrackIndex);
+      audio.play();
+      playIcon.className = 'fa-solid fa-pause';
+      eqVisualizer.classList.add('playing');
+    });
+
+    document.getElementById('prev-track').addEventListener('click', () => {
+      currentTrackIndex = (currentTrackIndex - 1 + tracksData.length) % tracksData.length;
+      loadTrack(currentTrackIndex);
+      audio.play();
+      playIcon.className = 'fa-solid fa-pause';
+      eqVisualizer.classList.add('playing');
+    });
+
+    
+
+    loadTrack(0);
+function toggleChatView() {
+    const chatFrame = document.getElementById('embedded-chat');
+    
+    // Πιάνουμε όλα τα πιθανά στοιχεία της οθόνης σας (canvas, βίντεο, κείμενα τίτλων)
+    const canvasScreen = document.getElementById('canvas');
+    const videoBg = document.querySelector('.video-background') || document.getElementById('bg-video');
+    const textInfo = document.querySelector('.info') || document.querySelector('.meta-info');
+
+    if (!chatFrame) return;
+
+    if (chatFrame.style.display === 'none') {
+        // 1. ΕΜΦΑΝΙΖΟΥΜΕ ΤΟ CHAT
+        chatFrame.style.display = 'block';
+        
+        // 2. ΚΡΥΒΟΥΜΕ ΤΗΝ ΟΘΟΝΗ ΤΟΥ PLAYER (ΚΑΜΒΑ, ΒΙΝΤΕΟ, ΤΙΤΛΟΥΣ)
+        if (canvasScreen) canvasScreen.style.display = 'none';
+        if (videoBg) videoBg.style.display = 'none';
+        if (textInfo) textInfo.style.display = 'none';
+        
+        // Αλλάζουμε το εικονίδιο σε νότα
+        document.getElementById('open-chat-btn').innerHTML = '<i class="fas fa-music"></i>';
+    } else {
+        // 1. ΚΡΥΒΟΥΜΕ ΤΟ CHAT
+        chatFrame.style.display = 'none';
+        
+        // 2. ΕΠΑΝΑΦΕΡΟΥΜΕ ΤΗΝ ΟΘΟΝΗ ΤΟΥ PLAYER ΣΤΗΝ ΑΡΧΙΚΗ ΤΗΣ ΜΟΡΦΗ
+        if (canvasScreen) canvasScreen.style.display = 'block';
+        if (videoBg) videoBg.style.display = 'block';
+        if (textInfo) textInfo.style.display = 'block';
+        
+        // Επαναφέρουμε το συννεφάκι
+        document.getElementById('open-chat-btn').innerHTML = '<i class="far fa-comment"></i>';
+    }
+}
+const volumeBar = document.getElementById('volume-bar');
+
+// Μόλις ανοίγει η σελίδα, κλειδώνουμε την ένταση του ραδιοφώνου στο 50%
+if (audio) {
+    audio.volume = 0.5;
+}
+
+// Ακούμε live πότε ο ακροατής σέρνει την μπάρα για να αλλάξει η ένταση
+if (volumeBar) {
+    volumeBar.addEventListener('input', (e) => {
+        if (audio) {
+            audio.volume = e.target.value;
+        }
+    });
+}
+
+ </script>
+</body>
+</html>
