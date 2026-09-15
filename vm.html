@@ -439,15 +439,24 @@
       currentTimeEl.innerText = formatTime(currentTime);
     });
 
+        // ΖΩΝΤΑΝΗ ΡΟΗ: Φορτώνει πάντα το "Τώρα" χωρίς να κρατάει παλιά μνήμη!
     playBtn.addEventListener('click', () => {
       if (audio.paused) {
-        audio.play();
+        // Ξαναφορτώνουμε το live link από την αρχή για να πιάσει το παρόν ακαριαία
+        const track = tracksData[currentTrackIndex];
+        audio.src = track.audioSrc;
+        audio.load();
+        
+        audio.play().catch(err => console.log("Χρειάζεται κλικ:", err));
         playIcon.className = 'fa-solid fa-pause';
-        eqVisualizer.classList.add('playing');
+        if (eqVisualizer) eqVisualizer.classList.add('playing');
       } else {
+        // Όταν πατάμε Pause, σταματάμε τον ήχο και αδειάζουμε τελείως το Buffer
         audio.pause();
+        audio.src = ""; 
+        
         playIcon.className = 'fa-solid fa-play';
-        eqVisualizer.classList.remove('playing');
+        if (eqVisualizer) eqVisualizer.classList.remove('playing');
       }
     });
 
