@@ -403,11 +403,10 @@
     const artistName = document.getElementById('artist-name');
     const volumeBar = document.getElementById('volume-bar');
 
-// Μόλις ανοίγει η σελίδα, κλειδώνουμε την ένταση του ραδιοφώνου ψηφιακά στο σωστό 50%
+// Μόλις ανοίγει η σελίδα, κλειδώνουμε την ένταση του ραδιοφώνου στο 50%
 if (audio) {
-    audio.volume = Math.pow(0.5, 2);
+    audio.volume = 0.5;
 }
-
     // Λειτουργία Ρολογιού & Ημερομηνίας
     function updateClock() {
       const now = new Date();
@@ -479,7 +478,7 @@ if (audio) {
     if (volumeBar) {
     volumeBar.addEventListener('input', (e) => {
         if (audio) {
-            audio.volume = Math.pow(e.target.value, 2);
+            audio.volume = e.target.value;
         }
     });
 }
