@@ -403,10 +403,10 @@
     const artistName = document.getElementById('artist-name');
     const volumeBar = document.getElementById('volume-bar');
 
-    // Κλειδώνουμε την ένταση στο 50% με το που φορτώνει η σελίδα για να μην υπάρχει αλλοίωση
-    if (audio) {
-        audio.volume = 0.5;
-    }
+// Μόλις ανοίγει η σελίδα, κλειδώνουμε την ένταση του ραδιοφώνου ψηφιακά στο σωστό 50%
+if (audio) {
+    audio.volume = Math.pow(0.5, 2);
+}
 
     // Λειτουργία Ρολογιού & Ημερομηνίας
     function updateClock() {
@@ -477,12 +477,12 @@
   
     // Συνδέουμε την Μπάρα Έντασης live με τον ήχο χωρίς να δημιουργούμε νέο Audio
     if (volumeBar) {
-        volumeBar.addEventListener('input', (e) => {
-            if (audio) {
-                audio.volume = e.target.value;
-            }
-        });
-    }
+    volumeBar.addEventListener('input', (e) => {
+        if (audio) {
+            audio.volume = Math.pow(e.target.value, 2);
+        }
+    });
+}
 
     // Αρχική φόρτωση του σταθμού
     loadTrack(0);
