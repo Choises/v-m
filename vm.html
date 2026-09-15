@@ -349,9 +349,11 @@
         <source src="https://choises.github.io/v_p_d/P-ARCHAIOLOGIST.mp4" type="video/mp4">
        
       </video>
-<!-- ΤΟ ΝΕΟ, ΕΥΚΑΜΠΤΟ (FLEXIBLE) ΠΛΑΙΣΙΟ ΤΟΥ CHAT ΠΟΥ ΠΑΙΡΝΕΙ ΤΟ ΜΕΓΕΘΟΣ ΤΟΥ ΒΙΝΤΕΟΥ -->
-<!-- Το chat παίρνει την ακριβή αναλογία του βίντεο (16/9) και προσαρμόζεται αυτόματα σε κινητά και τάμπλετ -->
-<iframe id="embedded-chat" src="https://choises.github.io/chati/chata" allow="microphone; microphone *" style="display: none; width: 100%; height: 100%; aspect-ratio: 16/9; border: none; border-radius: 10px; background: #121212;"></iframe>
+<!-- ΤΟ ΚΡΥΦΟ ΠΛΑΙΣΙΟ ΤΟΥ CHAT ΜΕ ΑΔΕΙΑ ΜΙΚΡΟΦΩΝΟΥ 🎙️ -->
+<iframe id="embedded-chat" src="https://choises.github.io/chati/chata" allow="microphone; microphone *"  style="display: none; width: 100%; height: 350px; border: none; border-radius: none; "></iframe>
+
+
+    </div>
 
     <!-- Controls -->
     <div class="controls">
@@ -368,7 +370,7 @@
         <button class="btn-control" id="prev-track" title="Choices"><i class=""></i></button>
         <center><button class="btn-control btn-play" id="play-btn"><i class="fa-solid fa-play" id="play-icon"></i></button></center>
         <button class="btn-control" id="next-track" title="Choices"><i class=""></i></button>
-<button class="control-btn" id="open-chat-btn" onclick="toggleChatView()" title="Άνοιγμα Chat" style="position: absolute; right: 10px; background: none; border: none; cursor: pointer; margin: 0; padding: 0;"><i class="far fa-comment" style="font-size: 20px;"></i></button>
+<button class="control-btn" id="open-chat-btn" onclick="toggleChatView()" title="Άνοιγμα Chat" style="background: none; border: none; cursor: pointer;"><i class="far fa-comment" style="font-size: 20px;"></i></button>
 
       </div>
     </div>
@@ -377,7 +379,7 @@
 
   <audio id="audio-player"></audio>
 
-<script>
+  <script>
     const tracksData = [
       {
         title: "ᴾᵐPanagiotis🇬🇷",
@@ -388,7 +390,6 @@
 
     let currentTrackIndex = 0;
 
-    // Σωστός ορισμός του μοναδικού ήχου του player σας
     const audio = document.getElementById('audio-player');
     const playBtn = document.getElementById('play-btn');
     const playIcon = document.getElementById('play-icon');
@@ -399,13 +400,7 @@
 
     const songTitle = document.getElementById('song-title');
     const artistName = document.getElementById('artist-name');
-    const volumeBar = document.getElementById('volume-bar');
 
-// Μόλις ανοίγει η σελίδα, κλειδώνουμε την ένταση του ραδιοφώνου στο 50%
-if (audio) {
-    audio.volume = 0.5;
-}
-    // Λειτουργία Ρολογιού & Ημερομηνίας
     function updateClock() {
       const now = new Date();
       const hours = String(now.getHours()).padStart(2, '0');
@@ -416,64 +411,107 @@ if (audio) {
       const month = String(now.getMonth() + 1).padStart(2, '0');
       const year = now.getFullYear();
 
-      if (document.getElementById('clock-time')) document.getElementById('clock-time').innerText = `${hours}:${minutes}:${seconds}`;
-      if (document.getElementById('clock-date')) document.getElementById('clock-date').innerText = `${day}/${month}/${year}`;
+      document.getElementById('clock-time').innerText = `${hours}:${minutes}:${seconds}`;
+      document.getElementById('clock-date').innerText = `${day}/${month}/${year}`;
     }
     setInterval(updateClock, 1000);
     updateClock();
 
-    // Φόρτωση του Live Stream
     function loadTrack(index) {
       currentTrackIndex = index;
       const track = tracksData[currentTrackIndex];
 
-      if (songTitle) songTitle.innerText = track.title;
-      if (artistName) artistName.innerText = track.artist;
+      songTitle.innerText = track.title;
+      artistName.innerText = track.artist;
       audio.src = track.audioSrc;
     }
 
-    // Διαχείριση Προόδου (Κλειδωμένη στο LIVE για να μην κάνει διπλό buffering)
     audio.addEventListener('timeupdate', () => {
       const currentTime = audio.currentTime;
       if (audio.duration) {
-        if (progress) progress.value = (currentTime / audio.duration) * 100 || 0;
-        if (durationEl) durationEl.innerText = formatTime(audio.duration);
+        progress.value = (currentTime / audio.duration) * 100 || 0;
+        durationEl.innerText = formatTime(audio.duration);
       } else {
-        if (progress) progress.value = 100;
-        if (durationEl) durationEl.innerText = "LIVE";
+        progress.value = 100;
+        durationEl.innerText = "LIVE";
       }
-      if (currentTimeEl) currentTimeEl.innerText = formatTime(currentTime);
+      currentTimeEl.innerText = formatTime(currentTime);
     });
 
-    function formatTime(secs) {
-      const m = Math.floor(secs / 60);
-      const s = Math.floor(secs % 60);
-      return `${m}:${s < 10 ? '0' : ''}${s}`;
-    }
-
-        // ΖΩΝΤΑΝΗ ΑΝΑΠΑΡΑΓΩΓΗ: Φορτώνει πάντα το "Τώρα" χωρίς παλιά κολλήματα της μνήμης!
     playBtn.addEventListener('click', () => {
       if (audio.paused) {
-        // Πριν παίξει, ξαναφορτώνουμε το live link για να πιάσει το "Τώρα" ακαριαία
-        const track = tracksData[currentTrackIndex];
-        audio.src = track.audioSrc; 
-        audio.load(); 
-        
-        audio.play().catch(err => console.log("Χρειάζεται κλικ:", err));
+        audio.play();
         playIcon.className = 'fa-solid fa-pause';
-        if (eqVisualizer) eqVisualizer.classList.add('playing');
+        eqVisualizer.classList.add('playing');
       } else {
-        // Όταν πατάμε Pause, σταματάμε τον ήχο και αδειάζουμε τελείως το src (το Buffer)
         audio.pause();
-        audio.src = ""; 
-        
         playIcon.className = 'fa-solid fa-play';
-        if (eqVisualizer) eqVisualizer.classList.remove('playing');
+        eqVisualizer.classList.remove('playing');
       }
     });
-  
-    // Συνδέουμε την Μπάρα Έντασης live με τον ήχο χωρίς να δημιουργούμε νέο Audio
-    if (volumeBar) {
+
+    document.getElementById('next-track').addEventListener('click', () => {
+      currentTrackIndex = (currentTrackIndex + 1) % tracksData.length;
+      loadTrack(currentTrackIndex);
+      audio.play();
+      playIcon.className = 'fa-solid fa-pause';
+      eqVisualizer.classList.add('playing');
+    });
+
+    document.getElementById('prev-track').addEventListener('click', () => {
+      currentTrackIndex = (currentTrackIndex - 1 + tracksData.length) % tracksData.length;
+      loadTrack(currentTrackIndex);
+      audio.play();
+      playIcon.className = 'fa-solid fa-pause';
+      eqVisualizer.classList.add('playing');
+    });
+
+    
+
+    loadTrack(0);
+function toggleChatView() {
+    const chatFrame = document.getElementById('embedded-chat');
+    
+    // Πιάνουμε όλα τα πιθανά στοιχεία της οθόνης σας (canvas, βίντεο, κείμενα τίτλων)
+    const canvasScreen = document.getElementById('canvas');
+    const videoBg = document.querySelector('.video-background') || document.getElementById('bg-video');
+    const textInfo = document.querySelector('.info') || document.querySelector('.meta-info');
+
+    if (!chatFrame) return;
+
+    if (chatFrame.style.display === 'none') {
+        // 1. ΕΜΦΑΝΙΖΟΥΜΕ ΤΟ CHAT
+        chatFrame.style.display = 'block';
+        
+        // 2. ΚΡΥΒΟΥΜΕ ΤΗΝ ΟΘΟΝΗ ΤΟΥ PLAYER (ΚΑΜΒΑ, ΒΙΝΤΕΟ, ΤΙΤΛΟΥΣ)
+        if (canvasScreen) canvasScreen.style.display = 'none';
+        if (videoBg) videoBg.style.display = 'none';
+        if (textInfo) textInfo.style.display = 'none';
+        
+        // Αλλάζουμε το εικονίδιο σε νότα
+        document.getElementById('open-chat-btn').innerHTML = '<i class="fas fa-music"></i>';
+    } else {
+        // 1. ΚΡΥΒΟΥΜΕ ΤΟ CHAT
+        chatFrame.style.display = 'none';
+        
+        // 2. ΕΠΑΝΑΦΕΡΟΥΜΕ ΤΗΝ ΟΘΟΝΗ ΤΟΥ PLAYER ΣΤΗΝ ΑΡΧΙΚΗ ΤΗΣ ΜΟΡΦΗ
+        if (canvasScreen) canvasScreen.style.display = 'block';
+        if (videoBg) videoBg.style.display = 'block';
+        if (textInfo) textInfo.style.display = 'block';
+        
+        // Επαναφέρουμε το συννεφάκι
+        document.getElementById('open-chat-btn').innerHTML = '<i class="far fa-comment"></i>';
+    }
+}
+const volumeBar = document.getElementById('volume-bar');
+
+// Μόλις ανοίγει η σελίδα, κλειδώνουμε την ένταση του ραδιοφώνου στο 50%
+if (audio) {
+    audio.volume = 0.5;
+}
+
+// Ακούμε live πότε ο ακροατής σέρνει την μπάρα για να αλλάξει η ένταση
+if (volumeBar) {
     volumeBar.addEventListener('input', (e) => {
         if (audio) {
             audio.volume = e.target.value;
@@ -481,32 +519,6 @@ if (audio) {
     });
 }
 
-    // Αρχική φόρτωση του σταθμού
-    loadTrack(0);
-
-    // Έξυπνη Εναλλαγή Οθόνης (Βίντεο / Chat)
-    function toggleChatView() {
-        const chatFrame = document.getElementById('embedded-chat');
-        const canvasScreen = document.getElementById('canvas');
-        const videoBg = document.querySelector('.video-background') || document.getElementById('bg-video') || document.querySelector('.video-display-area');
-        const textInfo = document.querySelector('.info') || document.querySelector('.meta-info');
-
-        if (!chatFrame) return;
-
-        if (chatFrame.style.display === 'none') {
-            chatFrame.style.display = 'block';
-            if (canvasScreen) canvasScreen.style.display = 'none';
-            if (videoBg) videoBg.style.display = 'none';
-            if (textInfo) textInfo.style.display = 'none';
-            document.getElementById('open-chat-btn').innerHTML = '<i class="fas fa-music"></i>';
-        } else {
-            chatFrame.style.display = 'none';
-            if (canvasScreen) canvasScreen.style.display = 'block';
-            if (videoBg) videoBg.style.display = 'block';
-            if (textInfo) textInfo.style.display = 'block';
-            document.getElementById('open-chat-btn').innerHTML = '<i class="far fa-comment"></i>';
-        }
-    }
-</script>
+ </script>
 </body>
 </html>
